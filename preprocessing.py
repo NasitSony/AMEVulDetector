@@ -70,7 +70,7 @@ def get_graph_feature():
         label_by_experts_valid.append(label.strip('\n'))
 
     graph_feature_train = np.loadtxt(graph_feature_train_data_path).tolist()  # graph feature train
-    graph_feature_test = np.loadtxt(graph_feature_test_data_path, delimiter=", ").tolist()  # graph feature test
+    graph_feature_test = np.loadtxt(graph_feature_test_data_path, delimiter=",").tolist()  # graph feature test
 
     for i in range(len(graph_feature_train)):
         graph_feature_train[i] = [graph_feature_train[i]]
@@ -84,5 +84,5 @@ def get_graph_feature():
 if __name__ == "__main__":
     pattern_train, pattern_test, pattern_experts_train, pattern_experts_test = get_pattern_feature()
     graph_train, graph_test, graph_experts_train, graph_experts_test = get_graph_feature()
+    #print(pattern_train, pattern_test, pattern_experts_train, pattern_experts_test)
     print()
-

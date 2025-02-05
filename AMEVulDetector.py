@@ -2,7 +2,9 @@ import numpy as np
 from parser import parameter_parser
 from models.EncoderWeight import EncoderWeight
 from models.EncoderAttention import EncoderAttention
+from models.EncoderAttentionTest import EncoderAttentionTest
 from models.FNNModel import FNNModel
+from models.FNNTest import FNNTest
 from preprocessing import get_graph_feature, get_pattern_feature
 
 args = parameter_parser()
@@ -64,10 +66,19 @@ def main():
         model = EncoderAttention(graph_train, graph_test, np.array(pattern1train), np.array(pattern2train),
                                  np.array(pattern3train), np.array(pattern1test), np.array(pattern2test),
                                  np.array(pattern3test), y_train, y_test)
+    elif args.model == 'EncoderAttentionTest':  # cross attention for computing the attention weight (using the ./pattern_feature/feature_FNN)
+        model = EncoderAttentionTest(graph_train, graph_test, np.array(pattern1train), np.array(pattern2train),
+                                 np.array(pattern3train), np.array(pattern1test), np.array(pattern2test),
+                                 np.array(pattern3test), y_train, y_test)    
     elif args.model == 'FNNModel':  # extract pattern feature using a feed-forward network (using the ./pattern_feature/feature_zeropadding)
         model = FNNModel(np.array(pattern1train), np.array(pattern2train), np.array(pattern3train),
                          np.array(pattern1test), np.array(pattern2test), np.array(pattern3test), y_train_pattern,
                          y_test_pattern)
+    elif args.model == 'FNNTest':  # extract pattern feature using a feed-forward network (using the ./pattern_feature/feature_zeropadding)
+        model = FNNTest(np.array(pattern1train), np.array(pattern2train), np.array(pattern3train),
+                         np.array(pattern1test), np.array(pattern2test), np.array(pattern3test), y_train_pattern,
+                         y_test_pattern)    
+        
 
     model.train()  # training
     model.test()  # testing

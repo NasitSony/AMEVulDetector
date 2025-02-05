@@ -15,7 +15,7 @@ Add the attention mechanism for graph feature and pattern feature
 """
 
 
-class EncoderAttention:
+class EncoderAttentionTest:
     def __init__(self, graph_train, graph_test, pattern1train, pattern2train, pattern3train, pattern1test, pattern2test,
                  pattern3test, y_train, y_test, batch_size=args.batch_size, lr=args.lr, epochs=args.epochs):
         input_dim = tf.keras.Input(shape=(1, 250), name='input')
@@ -63,9 +63,17 @@ class EncoderAttention:
     Training model
     """
     def train(self):
-        self.model.fit([self.graph_train, self.pattern1train, self.pattern2train, self.pattern3train], self.y_train,
+        self.model.fit([self.graph_train], self.y_train,
+                       batch_size=self.batch_size, epochs=self.epochs,
+                       validation_split=0.2, verbose=2)
+
+        """
+
+          self.model.fit([self.graph_train, self.pattern1train, self.pattern2train, self.pattern3train], self.y_train,
                        batch_size=self.batch_size, epochs=self.epochs, class_weight=self.class_weight,
                        validation_split=0.2, verbose=2)
+
+        """
         # self.model.save_weights("model.pkl")
 
     """
@@ -73,12 +81,24 @@ class EncoderAttention:
     """
     def test(self):
         # self.model.load_weights("_model.pkl")
-        values = self.model.evaluate([self.graph_test, self.pattern1test, self.pattern2test, self.pattern3test],
+
+
+        """
+         values = self.model.evaluate([self.graph_test, self.pattern1test, self.pattern2test, self.pattern3test],
+                                     self.y_test, batch_size=self.batch_size, verbose=1)
+        """
+
+        values = self.model.evaluate([self.graph_test],
                                      self.y_test, batch_size=self.batch_size, verbose=1)
         print("Loss: ", values[0], "Accuracy: ", values[1])
 
         # predictions
-        predictions = (self.model.predict([self.graph_test, self.pattern1test, self.pattern2test, self.pattern3test],
+
+        """
+          predictions = (self.model.predict([self.graph_test, self.pattern1test, self.pattern2test, self.pattern3test],
+                                          batch_size=self.batch_size).round())
+        """
+        predictions = (self.model.predict([self.graph_test],
                                           batch_size=self.batch_size).round())
 
         predictions = predictions.flatten()
