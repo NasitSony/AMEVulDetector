@@ -32,10 +32,10 @@ class FNNTest:
         self.batch_size = batch_size
         self.epochs = epochs
         self.class_weight = compute_class_weight(class_weight='balanced', classes=np.unique(y_train), y=y_train)
-        #get_class_weight = compute_class_weight(class_weight='balanced', classes=np.unique(y_train), y=y_train)
-        #print("class weight")
-        #self.class_weight = {'0':get_class_weight[0],'1':get_class_weight[1]};
-        #print(self.class_weight)
+        get_class_weight = compute_class_weight(class_weight='balanced', classes=np.unique(y_train), y=y_train)
+        print("class weight")
+        self.class_weight = {0:get_class_weight[0],1:get_class_weight[1]};
+        print(self.class_weight)
 
         pattern1vec = tf.keras.layers.Dense(250, activation='relu', name='outputpattern1vec')(input_dim)
         pattern2vec = tf.keras.layers.Dense(250, activation='relu', name='outputpattern2vec')(input_dim)
