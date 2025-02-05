@@ -64,8 +64,11 @@ class FNNTest:
     def train(self):
         # create the history instance
         train_history = self.model.fit([self.pattern1train, self.pattern2train,self.pattern3train ], self.y_train,
-                                       batch_size=self.batch_size, epochs=self.epochs, class_weight=self.class_weight,
-                                       validation_split=0.2, verbose=2)
+                                        batch_size=self.batch_size, epochs=self.epochs, class_weight=self.class_weight,
+                                        validation_split=0.2, verbose=2)
+       # train_history = self.model.fit([self.pattern1train,self.pattern2train,self.pattern3train], self.y_train,
+        #                               batch_size=self.batch_size, epochs=self.epochs,
+         #                              validation_split=0.2, verbose=2)
        #train_history = self.model.fit([self.pattern3train], self.y_train,
                                      #  batch_size=self.batch_size, epochs=self.epochs,validation_split=0.2, verbose=2)
 
