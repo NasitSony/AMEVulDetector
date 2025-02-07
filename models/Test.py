@@ -17,7 +17,7 @@ The feed-forward network for extracting the pattern feature
 """
 
 
-class FNNTest:
+class Test:
     def __init__(self, pattern1train, pattern2train, pattern3train, pattern1test, pattern2test,
                  pattern3test, y_train, y_test, batch_size=args.batch_size, lr=args.lr, epochs=args.epochs):
         input_dim = tf.keras.Input(shape=(1, 250), name='input')
@@ -47,11 +47,11 @@ class FNNTest:
 
         mergevec = tf.keras.layers.Concatenate(axis=1, name='mergevec')(
             [pattern1vec, pattern2vec, pattern3vec])  # concatenate patterns
-        flattenvec = tf.keras.layers.Flatten(name='flattenvec')(mergevec)  # flatten pattern vectors into one vec
+        flattenvec = tf.keras.layers.Flatten(name='flattenvec')(pattern1vec)  # flatten pattern vectors into one vec
 
         finalmergevec = tf.keras.layers.Dense(100, activation='relu', name='outputmergevec')(flattenvec)
         prediction = tf.keras.layers.Dense(1, activation='sigmoid', name='output')(finalmergevec)
-        model = tf.keras.Model(inputs=[mergevec], outputs=[prediction])
+        model = tf.keras.Model(inputs=[input_dim,input_dim,input_dim], outputs=[prediction])
 
         adama = tf.keras.optimizers.Adam(lr)
         loss = tf.keras.losses.binary_crossentropy
@@ -67,9 +67,9 @@ class FNNTest:
 
     def train(self):
         # create the history instance
-        train_history = self.model.fit([self.pattern1train,self.pattern2train,self.pattern3train], self.y_train,
+        """train_history = self.model.fit([self.pattern1train,self.pattern2train,self.pattern3train], self.y_train,
                                         batch_size=self.batch_size, epochs=self.epochs, class_weight=self.class_weight,
-                                        validation_split=0.2, verbose=2)
+                                        validation_split=0.2, verbose=2)"""
        # train_history = self.model.fit([self.pattern1train,self.pattern2train,self.pattern3train], self.y_train,
         #                               batch_size=self.batch_size, epochs=self.epochs,
          #                              validation_split=0.2, verbose=2)
@@ -78,18 +78,21 @@ class FNNTest:
 
         # self.model.save_weights("model.pkl")
 
+
+        train_h = self.model.fit([self.pattern1train,self.pattern2train,self.pattern3train], self.y_train, batch_size = self.batch_size, epochs = self.epochs, class_weight = self.class_weight, validation_split=0.2,verbose=2)
+
     """
     Testing model
     """
 
     def test(self):
         # self.model.load_weights("_model.pkl")
-        values = self.model.evaluate([self.pattern1test], self.y_test,
+        values = self.model.evaluate([self.pattern1test,self.pattern2train,self.pattern3train], self.y_test,
                                      batch_size=self.batch_size, verbose=1)
         print("Loss: ", values[0], "Accuracy: ", values[1])
 
         # predictions
-        predictions = self.model.predict([self.pattern1test],
+        predictions = self.model.predict([self.pattern1test,self.pattern2train,self.pattern3train],
                                          batch_size=self.batch_size).round()
         print('predict:')
         predictions = predictions.flatten()

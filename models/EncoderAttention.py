@@ -3,6 +3,7 @@ from parser import parameter_parser
 import tensorflow as tf
 from sklearn.utils import compute_class_weight
 from sklearn.metrics import confusion_matrix
+import numpy as np
 
 #tf.enable_eager_execution()
 tf.compat.v1.set_random_seed(6603)
@@ -34,6 +35,10 @@ class EncoderAttention:
         self.epochs = epochs
         self.class_weight = compute_class_weight(class_weight='balanced', classes=[0, 1], y=y_train)
 
+        get_class_weight = compute_class_weight(class_weight='balanced', classes=np.unique(y_train), y=y_train)
+        #print("class weight")
+        self.class_weight = {0:get_class_weight[0],1:get_class_weight[1]};
+
         graph2vec = tf.keras.layers.Dense(200, activation='relu', name='graph2vec')(input_dim)
         pattern1vec = tf.keras.layers.Dense(200, activation='relu', name='pattern1vec')(input_dim)
         pattern2vec = tf.keras.layers.Dense(200, activation='relu', name='pattern2vec')(input_dim)
@@ -63,7 +68,7 @@ class EncoderAttention:
     Training model
     """
     def train(self):
-        self.model.fit([self.graph_train, self.pattern1train, self.pattern2train, self.pattern3train], self.y_train,
+        self.model.fit([self.graph_train, self.pattern1test, self.pattern2test, self.pattern3test], self.y_train,
                        batch_size=self.batch_size, epochs=self.epochs, class_weight=self.class_weight,
                        validation_split=0.2, verbose=2)
         # self.model.save_weights("model.pkl")

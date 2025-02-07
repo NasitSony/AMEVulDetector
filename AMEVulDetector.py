@@ -5,6 +5,7 @@ from models.EncoderAttention import EncoderAttention
 from models.EncoderAttentionTest import EncoderAttentionTest
 from models.FNNModel import FNNModel
 from models.FNNTest import FNNTest
+from models.Test import Test
 from preprocessing import get_graph_feature, get_pattern_feature
 
 args = parameter_parser()
@@ -77,7 +78,11 @@ def main():
     elif args.model == 'FNNTest':  # extract pattern feature using a feed-forward network (using the ./pattern_feature/feature_zeropadding)
         model = FNNTest(np.array(pattern1train), np.array(pattern2train), np.array(pattern3train),
                          np.array(pattern1test), np.array(pattern2test), np.array(pattern3test), y_train_pattern,
-                         y_test_pattern)    
+                         y_test_pattern)
+    elif args.model == 'Test':  # extract pattern feature using a feed-forward network (using the ./pattern_feature/feature_zeropadding)
+        model = Test(np.array(pattern1train), np.array(pattern2train), np.array(pattern3train),
+                         np.array(pattern1test), np.array(pattern2test), np.array(pattern3test), y_train_pattern,
+                         y_test_pattern)     
         
 
     model.train()  # training
